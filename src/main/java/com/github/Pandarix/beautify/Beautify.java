@@ -1,11 +1,11 @@
 package com.github.Pandarix.beautify;
 
 import com.github.Pandarix.beautify.core.init.*;
-import com.github.Pandarix.beautify.event.ModEvents;
 import com.github.Pandarix.beautify.particle.ParticleInit;
 import com.github.Pandarix.beautify.util.Config;
 import com.github.Pandarix.beautify.world.structure.ModStructuresMain;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -21,13 +21,17 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("removal")
 @Mod(Beautify.MODID)
 public class Beautify {
 	public static final String MODID = "beautify";
+	// Directly reference a slf4j logger
+	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public Beautify() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -54,7 +58,7 @@ public class Beautify {
 	}
 
 	private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey
-			.create(Registries.PROCESSOR_LIST, new ResourceLocation("minecraft", "empty"));
+			.create(Registries.PROCESSOR_LIST, ResourceLocation.withDefaultNamespace("empty"));
 
 	/**
 	 * Adds the building to the targeted pool. We will call this in
@@ -116,25 +120,25 @@ public class Beautify {
 				.registry(Registries.TEMPLATE_POOL).orElseThrow();
 		Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess()
 				.registry(Registries.PROCESSOR_LIST).orElseThrow();
-		
+
 		int weight = Config.BOTANIST_SPAWN_WEIGHT.get();
 
 		// Adds our piece to all village houses pool
 		// Note, the resourcelocation is getting the pool files from the data folder.
 		// Not assets folder.
 		addBuildingToPool(templatePoolRegistry, processorListRegistry,
-				new ResourceLocation("minecraft:village/plains/streets"), "beautify:botanist_house_plains", weight);
+				ResourceLocation.parse("minecraft:village/plains/streets"), "beautify:botanist_house_plains", weight);
 
 		addBuildingToPool(templatePoolRegistry, processorListRegistry,
-				new ResourceLocation("minecraft:village/snowy/streets"), "beautify:botanist_house_snowy", weight);
+				ResourceLocation.parse("minecraft:village/snowy/streets"), "beautify:botanist_house_snowy", weight);
 
 		addBuildingToPool(templatePoolRegistry, processorListRegistry,
-				new ResourceLocation("minecraft:village/savanna/streets"), "beautify:botanist_house_savanna", weight);
+				ResourceLocation.parse("minecraft:village/savanna/streets"), "beautify:botanist_house_savanna", weight);
 
 		addBuildingToPool(templatePoolRegistry, processorListRegistry,
-				new ResourceLocation("minecraft:village/taiga/streets"), "beautify:botanist_house_taiga", weight);
+				ResourceLocation.parse("minecraft:village/taiga/streets"), "beautify:botanist_house_taiga", weight);
 
 		addBuildingToPool(templatePoolRegistry, processorListRegistry,
-				new ResourceLocation("minecraft:village/desert/streets"), "beautify:botanist_house_desert", weight);
+				ResourceLocation.parse("minecraft:village/desert/streets"), "beautify:botanist_house_desert", weight);
 	}
 }

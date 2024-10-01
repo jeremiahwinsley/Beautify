@@ -1,19 +1,19 @@
 package com.github.Pandarix.beautify.event;
 
-import java.util.List;
-
 import com.github.Pandarix.beautify.Beautify;
 import com.github.Pandarix.beautify.core.init.ItemInit;
 import com.github.Pandarix.beautify.core.init.ModVillagers;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Beautify.MODID)
 public class ModEvents {
@@ -27,7 +27,7 @@ public class ModEvents {
 			int villagerLevel = 1;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 2), stack, 16, 6, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 2), stack, 16, 6, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -36,7 +36,7 @@ public class ModEvents {
 			int villagerLevel = 1;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), stack, 12, 5, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 3), stack, 12, 5, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -45,7 +45,7 @@ public class ModEvents {
 			int villagerLevel = 1;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 2), stack, 16, 4, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 2), stack, 16, 4, 0.02F));
 		}
 
 		// lvl2
@@ -55,7 +55,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -64,7 +64,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -73,7 +73,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -82,7 +82,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -91,7 +91,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -100,7 +100,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -109,7 +109,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -118,7 +118,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -127,7 +127,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 16, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 16, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -136,7 +136,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 4), stack, 6, 9, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 4), stack, 6, 9, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -145,7 +145,7 @@ public class ModEvents {
 			int villagerLevel = 2;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), stack, 6, 8, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 3), stack, 6, 8, 0.02F));
 		}
 
 		// lvl3
@@ -155,7 +155,7 @@ public class ModEvents {
 			int villagerLevel = 3;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 8, 5, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 8, 5, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -164,7 +164,7 @@ public class ModEvents {
 			int villagerLevel = 3;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), stack, 12, 10, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 3), stack, 12, 10, 0.02F));
 		}
 
 		// lvl 4
@@ -174,7 +174,7 @@ public class ModEvents {
 			int villagerLevel = 4;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 48, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 48, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -183,7 +183,7 @@ public class ModEvents {
 			int villagerLevel = 4;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 2), stack, 16, 7, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 2), stack, 16, 7, 0.02F));
 		}
 
 		// lvl 5
@@ -193,7 +193,7 @@ public class ModEvents {
 			int villagerLevel = 5;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 24, 3, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 24, 3, 0.02F));
 		}
 
 		if (event.getType() == ModVillagers.BOTANIST.get()) {
@@ -202,7 +202,7 @@ public class ModEvents {
 			int villagerLevel = 5;
 
 			trades.get(villagerLevel)
-					.add((trader, rand) -> new MerchantOffer(new ItemStack(Items.EMERALD, 1), stack, 10, 7, 0.02F));
+					.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 1), stack, 10, 7, 0.02F));
 		}
 	}
 }

@@ -1,7 +1,5 @@
 package com.github.Pandarix.beautify.common.block;
 
-import java.util.List;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -10,9 +8,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -28,65 +26,76 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class LampLightBulb extends LanternBlock {
-	public static final BooleanProperty ON = BooleanProperty.create("on");
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
-	private static final VoxelShape SHAPE_HANGING = Block.box(5, 3, 5, 11, 16, 11);
-	private static final VoxelShape SHAPE_STANDING = Block.box(4, 0, 4, 12, 13, 12);
+public class LampLightBulb extends LanternBlock
+{
+    public static final BooleanProperty ON = BooleanProperty.create("on");
 
-	public LampLightBulb(Properties p_153465_) {
-		super(p_153465_);
-		this.registerDefaultState(this.defaultBlockState().setValue(ON, true));
-	}
+    private static final VoxelShape SHAPE_HANGING = Block.box(5, 3, 5, 11, 16, 11);
+    private static final VoxelShape SHAPE_STANDING = Block.box(4, 0, 4, 12, 13, 12);
 
-	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return state.getValue(HANGING) ? SHAPE_HANGING : SHAPE_STANDING;
-	}
+    public LampLightBulb(Properties p_153465_)
+    {
+        super(p_153465_);
+        this.registerDefaultState(this.defaultBlockState().setValue(ON, true));
+    }
 
-	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-			BlockHitResult pResult) {
-		if(pLevel.isClientSide()){
-			return InteractionResult.SUCCESS;
-		}
-		if (pHand == InteractionHand.MAIN_HAND && pPlayer.getItemInHand(pHand).isEmpty()) {
-			pLevel.setBlock(pPos, pState.setValue(ON, !pState.getValue(ON)), 3);
-			float f = pState.getValue(ON) ? 0.5F : 0.6F;
-			pLevel.playSound((Player) null, pPos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.25F, f);
-		}
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+    {
+        return state.getValue(HANGING) ? SHAPE_HANGING : SHAPE_STANDING;
+    }
 
-		return InteractionResult.SUCCESS;
-	}
+    @Override
+    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult)
+    {
+        level.setBlock(pos, blockState.setValue(ON, !blockState.getValue(ON)), 3);
+        float f = blockState.getValue(ON) ? 0.5F : 0.6F;
+        level.playSound((Player) null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.25F, f);
 
-	public void animateTick(BlockState p_57494_, Level p_57495_, BlockPos p_57496_, RandomSource p_57497_) {
-		double d0 = (double) p_57496_.getX() + 0.5D;
-		double d1 = (double) p_57496_.getY() + 0.7D;
-		double d2 = (double) p_57496_.getZ() + 0.5D;
+        return InteractionResult.sidedSuccess(level.isClientSide());
+    }
 
-		if (p_57497_.nextBoolean() && p_57494_.getValue(ON)) {
-			if (p_57494_.getValue(HANGING)) {
-				p_57495_.addParticle(ParticleTypes.SMOKE, d0, d1 - 0.3, d2, 0.0D, 0.0D, 0.0D);
-			} else {
-				p_57495_.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-			}
-		}
-	}
+    public void animateTick(BlockState blockState, Level level, BlockPos pos, RandomSource randomSource)
+    {
+        double d0 = (double) pos.getX() + 0.5D;
+        double d1 = (double) pos.getY() + 0.7D;
+        double d2 = (double) pos.getZ() + 0.5D;
 
-	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-		super.createBlockStateDefinition(pBuilder);
-		pBuilder.add(ON);
-	}
+        if (randomSource.nextBoolean() && blockState.getValue(ON))
+        {
+            if (blockState.getValue(HANGING))
+            {
+                level.addParticle(ParticleTypes.SMOKE, d0, d1 - 0.3, d2, 0.0D, 0.0D, 0.0D);
+            } else
+            {
+                level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            }
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void appendHoverText(ItemStack stack, BlockGetter getter, List<Component> component, TooltipFlag flag) {
-		if (!Screen.hasShiftDown()) {
-			component.add(Component.translatable("tooltip.shift").withStyle(ChatFormatting.YELLOW));
-		} else {
-			component.add(Component.translatable("light_bulb.description1").withStyle(ChatFormatting.GRAY));
-			component.add(Component.translatable("light_bulb.description2").withStyle(ChatFormatting.GRAY));
-		}
-		super.appendHoverText(stack, getter, component, flag);
-	}
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
+    {
+        super.createBlockStateDefinition(pBuilder);
+        pBuilder.add(ON);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @ParametersAreNonnullByDefault
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> components, TooltipFlag flag)
+    {
+        if (!Screen.hasShiftDown())
+        {
+            components.add(Component.translatable("tooltip.shift").withStyle(ChatFormatting.YELLOW));
+        } else
+        {
+            components.add(Component.translatable("light_bulb.description1").withStyle(ChatFormatting.GRAY));
+            components.add(Component.translatable("light_bulb.description2").withStyle(ChatFormatting.GRAY));
+        }
+        super.appendHoverText(stack, context, components, flag);
+    }
 }

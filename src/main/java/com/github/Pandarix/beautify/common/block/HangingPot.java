@@ -1,8 +1,5 @@
 package com.github.Pandarix.beautify.common.block;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -11,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -27,15 +24,20 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolAction;
+import org.jetbrains.annotations.NotNull;
 
-public class HangingPot extends LanternBlock {
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
+import java.util.List;
+
+public class HangingPot extends LanternBlock
+{
     private static final List<Item> validFlowers = Arrays.asList(Items.AIR, Items.ROSE_BUSH, Items.LILAC, Items.BLUE_ORCHID, Items.VINE, Items.SUNFLOWER, Items.PEONY, Items.AZURE_BLUET, Items.RED_TULIP, Items.ORANGE_TULIP, Items.WHITE_TULIP, Items.PINK_TULIP, Items.ALLIUM, Items.DANDELION,
             Items.POPPY, Items.GLOW_LICHEN, Items.OXEYE_DAISY, Items.LILY_OF_THE_VALLEY, Items.CORNFLOWER, Items.WEEPING_VINES, Items.TWISTING_VINES, Items.WITHER_ROSE, Items.GLOW_BERRIES, Items.SWEET_BERRIES, Items.SHORT_GRASS, Items.FERN);
 
@@ -44,7 +46,8 @@ public class HangingPot extends LanternBlock {
 
     public static final BooleanProperty GROWN = BooleanProperty.create("grown");
 
-    public HangingPot(Properties properties) {
+    public HangingPot(Properties properties)
+    {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(POTFLOWER, 0).setValue(GROWN, false));
     }
@@ -54,14 +57,17 @@ public class HangingPot extends LanternBlock {
     private static final VoxelShape STANDING_SHAPE = Shapes.or(box(5, 0, 5, 11, 5, 11), box(4, 5, 4, 12, 8, 12));
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+    {
         return state.getValue(HANGING) ? HANGING_SHAPE : STANDING_SHAPE;
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos blockPos, boolean bool) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos blockPos, boolean bool)
+    {
         //if the plant is grown long
-        if (state.getValue(GROWN)) {
+        if (state.getValue(GROWN))
+        {
             //if the neighbour is a model that clips into the pot
             if (blockPos.equals(pos.below()) && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP))
             {
@@ -77,100 +83,118 @@ public class HangingPot extends LanternBlock {
         super.neighborChanged(state, level, pos, block, blockPos, bool);
     }
 
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pResult) {
-        if (pLevel.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        }
-        if (pHand == InteractionHand.MAIN_HAND) {
-            ItemStack playerStack = pPlayer.getItemInHand(pHand); // saving ItemStack
-
+    @Override
+    @ParametersAreNonnullByDefault
+    @NotNull
+    public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pResult)
+    {
+        if (pHand == InteractionHand.MAIN_HAND)
+        {
             // growing plant
             // block below must not be sturdy to prevent clipping models
-            if (playerStack.getItem().equals(Items.BONE_MEAL) && pState.getValue(POTFLOWER) != 0 && !pLevel.getBlockState(pPos.below()).isFaceSturdy(pLevel, pPos.below(), Direction.UP)) {
-                if (!pState.getValue(GROWN)) {
+            if (itemStack.getItem().equals(Items.BONE_MEAL) && pState.getValue(POTFLOWER) != 0 && !pLevel.getBlockState(pPos.below()).isFaceSturdy(pLevel, pPos.below(), Direction.UP))
+            {
+                if (!pState.getValue(GROWN))
+                {
                     pLevel.playSound(null, pPos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1, 1);
-                    if (!pPlayer.isCreative()) {
-                        playerStack.shrink(1);
+                    if (!pPlayer.isCreative())
+                    {
+                        itemStack.shrink(1);
                     }
                     pLevel.setBlock(pPos, pState.setValue(GROWN, true), 3);
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.sidedSuccess(pLevel.isClientSide());
                 }
             }
 
             // when plant is grown -> using shears cuts it down
-            if (playerStack.canPerformAction(ToolAction.get("shears_harvest")) && pState.getValue(POTFLOWER) != 0 && pState.getValue(GROWN)) {
+            if (itemStack.canPerformAction(ToolAction.get("shears_harvest")) && pState.getValue(POTFLOWER) != 0 && pState.getValue(GROWN))
+            {
                 pLevel.playSound(null, pPos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1, 1);
                 pLevel.setBlock(pPos, pState.setValue(GROWN, false), 3);
                 ItemEntity Item = new ItemEntity(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), new ItemStack(validFlowers.get(pState.getValue(POTFLOWER))));
                 pLevel.addFreshEntity(Item);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
 
             // if there is a flower
-            if (pState.getValue(POTFLOWER) != 0) {
+            if (pState.getValue(POTFLOWER) != 0)
+            {
                 // giving flower and clearing pot if hand empty
-                if (playerStack.isEmpty()) {
+                if (itemStack.isEmpty())
+                {
                     pPlayer.setItemInHand(pHand, new ItemStack(validFlowers.get(pState.getValue(POTFLOWER)), pState.getValue(GROWN) ? 2 : 1)); // giving 1 or 2 of plant (grown or not)
                     pLevel.setBlock(pPos, pState.setValue(POTFLOWER, 0).setValue(GROWN, false), 3); // emptying the pot
                     pLevel.playSound(null, pPos, SoundEvents.COMPOSTER_READY, SoundSource.BLOCKS, 1, 1);
-                    return InteractionResult.SUCCESS;
-                } else if (playerStack.is(validFlowers.get(pState.getValue(POTFLOWER))) && playerStack.getCount() < playerStack.getMaxStackSize()) {
-                    playerStack.grow(pState.getValue(GROWN) ? 2 : 1); // giving 1 or 2 of plant (grown or not)
+                    return ItemInteractionResult.SUCCESS;
+                } else if (itemStack.is(validFlowers.get(pState.getValue(POTFLOWER))) && itemStack.getCount() < itemStack.getMaxStackSize())
+                {
+                    itemStack.grow(pState.getValue(GROWN) ? 2 : 1); // giving 1 or 2 of plant (grown or not)
                     pLevel.setBlock(pPos, pState.setValue(POTFLOWER, 0).setValue(GROWN, false), 3);
                     pLevel.playSound(null, pPos, SoundEvents.AZALEA_LEAVES_BREAK, SoundSource.BLOCKS, 1, 1);
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
 
                 // else just return
-                return InteractionResult.PASS;
-            } else { // if there is no flower
+                return ItemInteractionResult.FAIL;
+            } else
+            { // if there is no flower
 
                 // checks if the flower in hand matches the available types
-                for (Item flower : validFlowers) {
-                    if (playerStack.getItem().equals(flower)) {
+                for (Item flower : validFlowers)
+                {
+                    if (itemStack.getItem().equals(flower))
+                    {
                         pLevel.setBlock(pPos, pState.setValue(POTFLOWER, validFlowers.indexOf(flower)), 3);
-                        if (!flower.equals(Items.AIR)) {
+                        if (!flower.equals(Items.AIR))
+                        {
                             pLevel.playSound(null, pPos, SoundEvents.AZALEA_PLACE, SoundSource.BLOCKS, 1, 1);
                         }
-                        if (!pPlayer.isCreative()) {
-                            playerStack.shrink(1);
+                        if (!pPlayer.isCreative())
+                        {
+                            itemStack.shrink(1);
                         }
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                 }
                 // if the flower is not a valid one
-                return InteractionResult.PASS;
+                return ItemInteractionResult.FAIL;
             }
         }
         // end of statement
-        return InteractionResult.PASS;
+        return ItemInteractionResult.FAIL;
     }
 
     // creating Blockstates
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
+    {
         super.createBlockStateDefinition(pBuilder);
         pBuilder.add(POTFLOWER, GROWN);
     }
 
     @OnlyIn(Dist.CLIENT)
+    @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack stack, BlockGetter getter, List<Component> component, TooltipFlag flag) {
-        if (!Screen.hasShiftDown() && !Screen.hasControlDown()) {
-            component.add(Component.translatable("tooltip.shift").withStyle(ChatFormatting.YELLOW));
-            component.add(Component.translatable("tooltip.control").withStyle(ChatFormatting.YELLOW));
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> components, TooltipFlag flag)
+    {
+        if (!Screen.hasShiftDown() && !Screen.hasControlDown())
+        {
+            components.add(Component.translatable("tooltip.shift").withStyle(ChatFormatting.YELLOW));
+            components.add(Component.translatable("tooltip.control").withStyle(ChatFormatting.YELLOW));
         }
 
-        if (Screen.hasShiftDown()) {
-            component.add(Component.translatable("hanging_pot.description1").withStyle(ChatFormatting.GRAY));
-            component.add(Component.translatable("hanging_pot.description2").withStyle(ChatFormatting.GRAY));
-            component.add(Component.translatable("hanging_pot.description3").withStyle(ChatFormatting.GRAY));
+        if (Screen.hasShiftDown())
+        {
+            components.add(Component.translatable("hanging_pot.description1").withStyle(ChatFormatting.GRAY));
+            components.add(Component.translatable("hanging_pot.description2").withStyle(ChatFormatting.GRAY));
+            components.add(Component.translatable("hanging_pot.description3").withStyle(ChatFormatting.GRAY));
         }
 
-        if (Screen.hasControlDown()) {
-            component.add(Component.translatable("hanging_pot.list1").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GRAY));
-            component.add(Component.translatable("hanging_pot.list2").withStyle(ChatFormatting.GRAY));
+        if (Screen.hasControlDown())
+        {
+            components.add(Component.translatable("hanging_pot.list1").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GRAY));
+            components.add(Component.translatable("hanging_pot.list2").withStyle(ChatFormatting.GRAY));
         }
-        super.appendHoverText(stack, getter, component, flag);
+        super.appendHoverText(stack, context, components, flag);
     }
 }
