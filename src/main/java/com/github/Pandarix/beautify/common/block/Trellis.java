@@ -30,8 +30,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -164,7 +162,6 @@ public class Trellis extends HorizontalDirectionalBlock
         p_57561_.add(FACING, CEILLING, FLOWERS);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @ParametersAreNonnullByDefault
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> components, TooltipFlag flag)

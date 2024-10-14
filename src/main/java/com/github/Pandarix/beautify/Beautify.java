@@ -3,7 +3,6 @@ package com.github.Pandarix.beautify;
 import com.github.Pandarix.beautify.core.init.*;
 import com.github.Pandarix.beautify.particle.ParticleInit;
 import com.github.Pandarix.beautify.util.Config;
-import com.github.Pandarix.beautify.world.structure.ModStructuresMain;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
@@ -15,46 +14,36 @@ import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("removal")
 @Mod(Beautify.MODID)
 public class Beautify {
 	public static final String MODID = "beautify";
 	// Directly reference a slf4j logger
 	public static final Logger LOGGER = LogUtils.getLogger();
 
-	public Beautify() {
-		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public Beautify(IEventBus modEventBus, ModContainer modContainer) {
 		ItemInit.ITEMS.register(modEventBus);
 		BlockInit.BLOCKS.register(modEventBus);
 		ItemGroupInit.CREATIVE_MODE_TABS.register(modEventBus);
 		SoundInit.SOUND_EVENTS.register(modEventBus);
 		ParticleInit.PARTICLE_TYPES.register(modEventBus);
 
-		modEventBus.addListener(this::commonSetup);
 		ModVillagers.POI_TYPES.register(modEventBus);
 		ModVillagers.VILLAGER_PROFESSIONS.register(modEventBus);
 
-		Config.register();
-
-		ModStructuresMain.register(modEventBus);
-		MinecraftForge.EVENT_BUS.addListener(this::addNewVillageBuilding);
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-	private void commonSetup(final FMLCommonSetupEvent event) {
-		event.enqueueWork(() -> {
-		});
+		modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+		NeoForge.EVENT_BUS.addListener(this::addNewVillageBuilding);
 	}
 
 	private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey

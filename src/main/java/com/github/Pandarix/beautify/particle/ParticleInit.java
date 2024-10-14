@@ -3,14 +3,16 @@ package com.github.Pandarix.beautify.particle;
 import com.github.Pandarix.beautify.Beautify;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
+
 
 public class ParticleInit {
 	public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister
-			.create(ForgeRegistries.PARTICLE_TYPES, Beautify.MODID);
+			.create(BuiltInRegistries.PARTICLE_TYPE, Beautify.MODID);
 
-	public static final RegistryObject<SimpleParticleType> GLOWESSENCE_PARTICLES = PARTICLE_TYPES
+	public static final Supplier<SimpleParticleType> GLOWESSENCE_PARTICLES = PARTICLE_TYPES
 			.register("glowessence_particles", () -> new SimpleParticleType(true));
 }

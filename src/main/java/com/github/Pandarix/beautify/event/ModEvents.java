@@ -9,13 +9,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Beautify.MODID)
+@EventBusSubscriber(modid = Beautify.MODID)
 public class ModEvents {
 	@SubscribeEvent
 	public static void addCustomTrades(VillagerTradesEvent event) {

@@ -3,8 +3,7 @@ package com.github.Pandarix.beautify.particle.custom;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
 
 public class GlowEssenceParticles extends TextureSheetParticle {
 
@@ -58,7 +57,6 @@ public class GlowEssenceParticles extends TextureSheetParticle {
 		this.move();
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	public static class Provider implements ParticleProvider<SimpleParticleType> {
 		private final SpriteSet sprites;
 

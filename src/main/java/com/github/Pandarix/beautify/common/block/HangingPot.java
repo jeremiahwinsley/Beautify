@@ -27,9 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbilities;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -107,7 +105,7 @@ public class HangingPot extends LanternBlock
             }
 
             // when plant is grown -> using shears cuts it down
-            if (itemStack.canPerformAction(ToolAction.get("shears_harvest")) && pState.getValue(POTFLOWER) != 0 && pState.getValue(GROWN))
+            if (itemStack.canPerformAction(ItemAbilities.SHEARS_HARVEST) && pState.getValue(POTFLOWER) != 0 && pState.getValue(GROWN))
             {
                 pLevel.playSound(null, pPos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1, 1);
                 pLevel.setBlock(pPos, pState.setValue(GROWN, false), 3);
@@ -172,7 +170,6 @@ public class HangingPot extends LanternBlock
         pBuilder.add(POTFLOWER, GROWN);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @ParametersAreNonnullByDefault
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> components, TooltipFlag flag)
