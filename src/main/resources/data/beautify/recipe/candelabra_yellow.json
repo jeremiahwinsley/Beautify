@@ -14,7 +14,7 @@
 		}
 	},
 	"result": {
-		"item": "beautify:lamp_candelabra_yellow",
+		"id": "beautify:lamp_candelabra_yellow",
 		"count": 1
 	},
 	"group": "candelabras"
